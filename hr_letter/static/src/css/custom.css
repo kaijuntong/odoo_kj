@@ -1,0 +1,23 @@
+.custom_css {
+    background-color: yellow;
+}
+
+.bcolor {
+    color: red;
+}
+
+.table {
+    display: table;
+}
+
+.table .row {
+    display: table-row;
+}
+
+.table .cell {
+    display: table-cell;
+    border: solid;
+    border-width: thin;
+    padding-left: 5px;
+    padding-right: 5px;
+}

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="paperformat_euro_landscape"
+            model="report.paperformat">
+        <field name="name">European A4 Landscape</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_buttom">23</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <template id="print_letter">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <xpath expr="." position="inside">
+                            <link href="/hr_letter/static/src/css/custom.css" rel="stylesheet"/>
+                        </xpath>
+                        <!--Report header-->
+                        <div class="row">
+                            <div name="letter_ref_label" class="text-right col-xs-5 col-xs-offset-7">
+                                Ref No:
+                                <span t-field="o.ref_no"/>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h1>
+                                <span t-field="o.type_of_letter"/>
+                            </h1>
+                            <p>Hi <span t-field="o.employee_id"/>,
+                            </p>
+                            <p>This is a
+                                <span t-field="o.type_of_letter"/>
+                                for you
+                            </p>
+                        </div>
+
+                        <div class="table">
+                            <div class="row">
+                                <div class="cell col-xs-2 bg-info">To</div>
+                                <div class="cell col-xs-4">
+                                    <span t-field="o.employee_id"/>
+                                </div>
+                                <div class="cell col-xs-2">Department</div>
+                                <div class="cell col-xs-4">
+                                    <span t-field="o.department_id"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell col-xs-2">FROM</div>
+                                <div class="cell col-xs-4">GLORY ESTATE LTD</div>
+                                <div class="cell col-xs-2">Department</div>
+                                <div class="cell col-xs-4">HR</div>
+                            </div>
+                        </div>
+                        <!--<div class="row bg-success">-->
+                            <!--<div class="col-xs-3">-->
+                                <!--<span class="glyphicon glypicon-pushpin"/>-->
+                                <!--What-->
+                            <!--</div>-->
+
+                            <!--<div class="col-xs-2">Who</div>-->
+                            <!--<div class="col-xs-1">When</div>-->
+                            <!--<div class="col-xs-3">Where</div>-->
+                            <!--<div class="col-xs-3">Watchers</div>-->
+                        <!--</div>-->
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <h4>
+                                    <span t-field="o.employee_id"/>
+                                </h4>
+                            </div>
+                        </div>
+                        <!--Report row content-->
+
+                        <!--Report footer-->
+                    </div>
+                </t>
+
+            </t>
+        </t>
+    </template>
+
+    <report id="action_print_employees_letter"
+            string="Letter"
+            model="hr.letter"
+            report_type="qweb-pdf"
+            name="hr_letter.print_letter"
+            paperformat="paperformat_euro_landscape"/>
+
+
+    <record id="email_template_hr_letter" model="mail.template">
+        <field name="name">Letter</field>
+        <field name="subject">${object.type_of_letter.name} for ${object.employee_id.name}</field>
+        <field name="model_id" ref="hr_letter.model_hr_letter"/>
+        <field name="email_to">${object.employee_id.work_email}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="report_template" ref="hr_letter.action_print_employees_letter"/>
+        <field name="report_name">${object.type_of_letter.name.title()} for ${object.employee_id.name}</field>
+    </record>
+
+
+</odoo>

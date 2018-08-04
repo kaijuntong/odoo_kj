@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="survey_input_reviewer_access_rule" model="ir.rule">
+            <field name="name">Survey input only for reviewer</field>
+            <field name="model_id" ref="model_survey_user_input"/>
+            <field name="domain_force">
+                [('reviewer_id.user_id','=',user.id)]
+            </field>
+        </record>
+    </data>
+</odoo>

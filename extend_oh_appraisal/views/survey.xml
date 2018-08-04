@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record model="ir.ui.view" id="survey_form_view_is_appraisal_init">
+        <field name="name">survey_form_view_is_appraisal</field>
+        <field name="model">survey.survey</field>
+        <field name="inherit_id" ref="survey.survey_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='auth_required']" position="after">
+            <!--<xpath expr="//form/sheet/notebook/page/group/field[@name='auth_required']" position="after">-->
+                <field name="is_appraisal" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

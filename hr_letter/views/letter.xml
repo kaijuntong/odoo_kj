@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.actions.act_window" id="letter_list_action">
+        <field name="name">Letter</field>
+        <field name="res_model">hr.letter</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="letter_type_list_action">
+        <field name="name">Letter Type</field>
+        <field name="res_model">hr.letter.type</field>
+        <field name="view_model">tree,form</field>
+    </record>
+
+
+    <!--Tree view-->
+    <record model="ir.ui.view" id="letter_tree_view">
+        <field name="name">hr.letter.tree</field>
+        <field name="model">hr.letter</field>
+        <field name="arch" type="xml">
+            <tree string="Letter Tree">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="type_of_letter"/>
+                <field name="received_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Add view to employee-->
+    <record model="ir.ui.view" id="employee_letter_view">
+        <field name="name">hr.employee.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <page name="hr_settings" position="inside">
+                <separator string="Letter"/>
+                <field name="letter_ids" wiget="one2many_tags"/>
+            </page>
+        </field>
+    </record>
+
+
+    <!--Search field for letter-->
+    <record id="view_filter_hr_letter" model="ir.ui.view">
+        <field name="model">hr.letter</field>
+        <field name="priority">15</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <separator/>
+                <field name="department_id"/>
+                <separator/>
+                <filter name="group_department" string="By Department"
+                        context="{'group_by':'department_id'}"/>
+                <separator/>
+                <filter name="group_letter_type" string="By Letter Type"
+                        context="{'group_by':'type_of_letter'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!--Letter Form-->
+    <record id="view_form_hr_letter_ui"
+            model="ir.ui.view">
+        <field name="model">hr.letter</field>
+        <field name="priority">15</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!--Button-->
+                    <button name="letter_send_action" type="object" class="btn-info" string="Send Email"/>
+                </header>
+                <sheet>
+                    <group name="group_top">
+                        <group name="group_left">
+                            <field name="type_of_letter"/>
+                            <field name="employee_id"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="issue_date"/>
+                            <field name="received_date"/>
+                        </group>
+                        <group name="group_right">
+                            <field name="ref_no"/>
+                            <field name="company"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <!--<field name="time"/> -->
+                        </group>
+                    </group>
+                    <group name="group_bottom">
+                        <field name="particular"/>
+                        <field name="reason"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!--Tree view for type-->
+    <record model="ir.ui.view" id="letter_type_tree_view">
+        <field name="name">hr.letter.type.tree</field>
+        <field name="model">hr.letter.type</field>
+        <field name="arch" type="xml">
+            <tree string="Letter Type">
+                <field name="sequence" widget="handle"/>
+                <field name="name" colspan="4"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!--Form View for Letter type-->
+    <record model="ir.ui.view" id="letter_type_view_form">
+        <field name="name">hr.letter.type.form</field>
+        <field name="model">hr.letter.type</field>
+        <field name="arch" type="xml">
+            <form string="Letter Type">
+                <group col="4">
+                    <field colspan="4" name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!--Sequence-->
+    <record id="letter_sequence" model="ir.sequence">
+        <field name="name">HR letter sequence</field>
+        <field name="code">hr.letter.sequence</field>
+        <field name="prefix">L/%(year)s/</field>
+        <field name="padding">5</field>
+    </record>
+
+    <menuitem id="main_letter_menu" name="Letter" sequence="50"/>
+    <menuitem id="letter_menu" name="Letter" parent="hr.menu_hr_root"
+              action="letter_list_action"/>
+
+    <menuitem id="letter_configuration_menu" name="Configuration" parent="hr.menu_hr_root"/>
+    <menuitem id="letter_type" name="Letter Type" parent="hr.menu_human_resources_configuration"
+              action="letter_type_list_action"/>
+
+</odoo>

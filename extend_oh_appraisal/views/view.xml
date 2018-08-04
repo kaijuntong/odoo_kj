@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--Add view to employee-->
+    <record model="ir.ui.view" id="oh_appraisal_department_view">
+        <field name="name">hr.appraisal.form</field>
+        <field name="model">hr.appraisal</field>
+        <field name="inherit_id" ref="oh_appraisal.hr_appraisal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="appraisal_deadline" position="after">
+                <field name="department_id" attrs="{'readonly':True}"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_appraisal_survey_add_department_id">
+        <field name="name">hr_appraisal extend list</field>
+        <field name="model">survey.user_input</field>
+        <field name="priority">1</field>
+        <field name="inherit_id" ref="survey.survey_user_input_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='email']" position="after">
+                <field name="department_id" attrs="{'readonly':True}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="hr_appraisal_survey_inherited_oh">
+        <field name="name">hr_appraisal extend list</field>
+        <field name="model">survey.user_input</field>
+        <field name="priority">1</field>
+        <field name="inherit_id" ref="survey.survey_user_input_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='token']" position="after">
+                <field name="survey_url" attrs="{'readonly':True}" widget="url" text="Go to survey"/>
+                <field name="reviewer_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_appraisal_survey_hide_token">
+        <field name="name">hr_appraisal hide token</field>
+        <field name="model">survey.user_input</field>
+        <field name="priority">1</field>
+        <field name="inherit_id" ref="survey.survey_user_input_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='token']" position="attributes">
+                <attribute name="attrs">{'invisible':True}</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!--ADD Reviewer to surver answer tree-->
+    <record model="ir.ui.view" id="survey_user_input_tree_reviewer">
+        <field name="name">survey_user_input_tree_reviewer</field>
+        <field name="model">survey.user_input</field>
+        <field name="priority">1</field>
+        <field name="inherit_id" ref="survey.survey_user_input_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="/tree/field[@name='deadline']" position="after">
+                <field name="reviewer_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--ADD Reviewer to surver answer search-->
+    <record model="ir.ui.view" id="survey_user_input_search_reviewer">
+        <field name="name">survey_user_input_search_reviewer</field>
+        <field name="model">survey.user_input</field>
+        <field name="priority">1</field>
+        <field name="inherit_id" ref="survey.survey_user_input_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="/search/group/filter[@name='group_by_survey']" position="before">
+                <filter string="Reviewer" domain="[]" context="{'group_by': 'reviewer_id'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
